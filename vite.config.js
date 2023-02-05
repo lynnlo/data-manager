@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: "/senior-assassin-game/",
   server: {
     port: 3000,
   }
