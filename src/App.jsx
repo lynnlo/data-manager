@@ -5,8 +5,11 @@ import {
   BooleanInput,
   Confirm,
   Create,
+  CreateButton,
   Datagrid,
   Edit,
+  EditButton,
+  ExportButton,
   FunctionField,
   List,
   Resource,
@@ -14,6 +17,7 @@ import {
   TextField,
   TextInput,
   Toolbar,
+  TopToolbar,
 } from 'react-admin'
 
 import {
@@ -27,6 +31,8 @@ import {
 } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import DeleteIcon from '@mui/icons-material/Delete'
+import FileUploadIcon from '@mui/icons-material/FileUpload'
+import FileDownloadIcon from '@mui/icons-material/FileDownload'
 
 import localStorage from 'ra-data-local-storage'
 
@@ -39,7 +45,7 @@ const localDataProvider = localStorage({
         name: 'John Doe',
         team: 'Feisty Ferrets',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -51,7 +57,7 @@ const localDataProvider = localStorage({
         name: 'Sarah Doe',
         team: 'Feisty Ferrets',
         alive: false,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -63,7 +69,7 @@ const localDataProvider = localStorage({
         name: 'John Smith',
         team: 'Crazy Cats',
         alive: true,
-        boughtBack: true,
+        bought_back: true,
         target: "",
         history: [
         ],
@@ -76,7 +82,7 @@ const localDataProvider = localStorage({
         name: 'Juniper Fox',
         team: 'Crazy Cats',
         alive: true,
-        boughtBack: true,
+        bought_back: true,
         target: "",
         history: [
         ],
@@ -88,7 +94,7 @@ const localDataProvider = localStorage({
         name: 'Felix Mark',
         team: 'Zany Zebras',
         alive: false,
-        boughtBack: true,
+        bought_back: true,
         target: "",
         history: [
         ],
@@ -100,7 +106,7 @@ const localDataProvider = localStorage({
         name: 'Pedro Williams',
         team: 'Zany Zebras',
         alive: false,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -113,7 +119,7 @@ const localDataProvider = localStorage({
         name: 'Terry Crews',
         team: 'Hilarious Hippos',
         alive: false,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -125,7 +131,7 @@ const localDataProvider = localStorage({
         name: 'Sally Fox',
         team: 'Hilarious Hippos',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -138,7 +144,7 @@ const localDataProvider = localStorage({
         name: 'James Kurt',
         team: 'Silly Sharks',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -150,7 +156,7 @@ const localDataProvider = localStorage({
         name: 'Sally Kurt',
         team: 'Silly Sharks',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -163,7 +169,7 @@ const localDataProvider = localStorage({
         name: 'Harry Potter',
         team: 'Witty Wolves',
         alive: false,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -175,7 +181,7 @@ const localDataProvider = localStorage({
         name: 'Ron Weasley',
         team: 'Witty Wolves',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -187,7 +193,7 @@ const localDataProvider = localStorage({
         name: 'Hermione Granger',
         team: 'Inching Insects',
         alive: false,
-        boughtBack: true,
+        bought_back: true,
         target: "",
         history: [
         ],
@@ -199,7 +205,7 @@ const localDataProvider = localStorage({
         name: 'Luna Lovegood',
         team: 'Inching Insects',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -211,7 +217,7 @@ const localDataProvider = localStorage({
         name: 'Draco Malfoy',
         team: 'Precious Pigs',
         alive: true,
-        boughtBack: true,
+        bought_back: true,
         target: "",
         history: [
         ],
@@ -224,7 +230,7 @@ const localDataProvider = localStorage({
         name: 'Neville Longbottom',
         team: 'Precious Pigs',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -236,7 +242,7 @@ const localDataProvider = localStorage({
         name: 'Fred Weasley',
         team: 'Great Gophers',
         alive: false,
-        boughtBack: true,
+        bought_back: true,
         target: "",
         history: [
         ],
@@ -248,7 +254,7 @@ const localDataProvider = localStorage({
         name: 'George Weasley',
         team: 'Great Gophers',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -263,7 +269,7 @@ const localDataProvider = localStorage({
         name: 'Ginny Weasley',
         team: 'Lonely Lizards',
         alive: true,
-        boughtBack: false,
+        bought_back: false,
         target: "",
         history: [
         ],
@@ -275,7 +281,7 @@ const localDataProvider = localStorage({
         name: 'Severus Snape',
         team: 'Lonely Lizards',
         alive: false,
-        boughtBack: true,
+        bought_back: true,
         target: "",
         history: [
         ],
@@ -290,7 +296,6 @@ const localDataProvider = localStorage({
 
 //#region Dashboard
 let assignTargets = () => {
-  
   localDataProvider.getList('users', { filter: { alive: true }, sort: { field: "name", order: "ascending" }, pagination: { page: 1 , perPage: 200 } } ).then(data => {
     let users = data.data
 
@@ -360,7 +365,7 @@ let Dashboard = () => {
   //#region State
   let [totalParticipants, setTotalParticipants] = useState(-1)
   let [totalEliminations, setTotalEliminations] = useState(-1)
-  let [totalBoughtBack, setTotalBoughtBack] = useState(-1)
+  let [totalBought_back, setTotalBought_back] = useState(-1)
   let [totalTeams, setTotalTeams] = useState(-1)
 
   localDataProvider.getList('users', { filter: { alive: true }, sort: { field: "name", order: "ascending" }, pagination: { page: 1 , perPage: 200 } } ).then(data => {
@@ -389,8 +394,8 @@ let Dashboard = () => {
     setTimeout(() => {setTotalTeams(Object.keys(teams).length)}, 1000)
   })
 
-  localDataProvider.getList('users', { filter: { boughtBack: true }, sort: { field: "name", order: "ascending" }, pagination: { page: 1 , perPage: 200 } } ).then(data => {
-    setTimeout(() => {setTotalBoughtBack(data.total)}, 500)
+  localDataProvider.getList('users', { filter: { bought_back: true }, sort: { field: "name", order: "ascending" }, pagination: { page: 1 , perPage: 200 } } ).then(data => {
+    setTimeout(() => {setTotalBought_back(data.total)}, 500)
   })
   //#endregion
 
@@ -425,7 +430,7 @@ let Dashboard = () => {
             <Grid item xs={12} sm={6}>
               <Typography variant='h6' sx={ { m: 2 } }> Total Amount Raised: </Typography>
               {
-                (totalParticipants === -1 || totalBoughtBack === -1) ? <CircularProgress /> : <Typography variant='h1' sx={ { m: 2 } }> ${10 * (totalParticipants + totalBoughtBack)} </Typography>
+                (totalParticipants === -1 || totalBought_back === -1) ? <CircularProgress /> : <Typography variant='h1' sx={ { m: 2 } }> ${10 * (totalParticipants + totalBought_back)} </Typography>
               }
             </Grid>
           </Grid>
@@ -458,9 +463,96 @@ let Dashboard = () => {
 //#endregion
 
 //#region Users
+let UsersActions = ({ basePath }) => {
+  let [confirmOpen, setConfirmOpen] = useState(false)
+
+  let importUsers = () => {
+    // Import File into Database
+    let file = document.createElement('input')
+    file.type = 'file'
+    file.accept = '.csv'
+    file.click()
+
+    file.onchange = () => {
+      // Remove All Users from Database
+      localDataProvider.getList('users', { sort: { field: "name", order: "ascending" }, pagination: { page: 1 , perPage: 200 } } ).then(data => {
+        let users = data.data
+        users.forEach(user => {
+          localDataProvider.delete('users', { id: user.id })
+        })
+      })
+
+      // Add Users to Database
+      let reader = new FileReader()
+      reader.readAsText(file.files[0])
+      reader.onload = () => {
+        let data = reader.result
+        let lines = data.split('\n')
+
+        lines.shift()
+        lines.forEach(line => {
+          let values = line.split(',')
+          console.log(values)
+          if (values.length !== 8) {
+            console.log("Invalid CSV")
+            return
+          }
+
+          let id = values[0]
+          let name = values[1]
+          let team = values[2]
+          let alive = values[3] === 'true'
+          let bought_back = values[4] === 'true'
+          let target = values[5] || ''
+          let history = values[6].split(';') || []
+          let eliminations = values[7].split(';') || []
+          localDataProvider.create('users', { data: { id, name, team, alive, bought_back, target, history, eliminations } })
+          window.location.reload()
+        })
+      }
+    }
+  }
+
+  let exportUsers = () => {
+    // Export Database to File
+    localDataProvider.getList('users', { sort: { field: "name", order: "ascending" }, pagination: { page: 1 , perPage: 200 } } ).then(data => {
+      let users = data.data
+      let csv = 'id,name,team,alive,bought_back,target,history,eliminations\n'
+      users.forEach(user => {
+        csv += `${user.id},${user.name},${user.team},${user.alive},${user.bought_back},${user.target},${user.history.join(';')},${user.eliminations.join(';')}\n`
+      })
+      let blob = new Blob([csv], { type: 'text/csv' })
+      let url = window.URL.createObjectURL(blob)
+      let a = document.createElement('a')
+      a.href = url
+      a.download = 'users.csv'
+      a.click()
+    })
+  }
+
+  return (
+    <TopToolbar>
+      <CreateButton size='large' basepath={basePath} />
+      <Button size='large' color='primary' startIcon={<FileDownloadIcon />} onClick={exportUsers}>
+        Export
+      </Button>
+      <Button size='large' color='primary' startIcon={<FileUploadIcon />} onClick={() => {setConfirmOpen(true)}}>
+        Import
+      </Button>
+      <Confirm
+        isOpen={confirmOpen}
+        title="Import Users"
+        content="This will delete all users and import new ones. Are you sure?"
+        onConfirm={() => {importUsers(); setConfirmOpen(false); }}
+        onClose={() => {setConfirmOpen(false)}}
+      />
+    </TopToolbar>
+  )
+}
+
 let Users = () => {
   return (
-    <List>
+    <List actions={<UsersActions />}>
       <Datagrid>
         <FunctionField label="Name" render={
           record => (
@@ -474,7 +566,7 @@ let Users = () => {
         <TextField source="team" />
         <TextField source="target" />
         <BooleanField source="alive" />
-        <BooleanField source="boughtBack" />
+        <BooleanField source="bought_back" />
         {
           /*
         <FunctionField label="Eliminations" render={record => record.eliminations.length} />
@@ -534,7 +626,7 @@ let UsersCreate = () => {
 
   let createUser = (e) => {
     e.preventDefault()
-    localDataProvider.create('users', { data: { name: name, team: team, alive: true, boughtBack: false, eliminations: [] } })
+    localDataProvider.create('users', { data: { name: name, team: team, alive: true, bought_back: false, eliminations: [] } })
   }
 
 
@@ -569,26 +661,26 @@ let UsersCreate = () => {
 }
 
 let UsersEdit = () => {
-  let [team, setTeam] = useState("")
-
-  let [name, setName] = useState("")
+  let saveUser = (e) => {
+    e.preventDefault()
+    localDataProvider.update('users', { id: window.location.href.split("/").pop(), data: { name: name, team: team, alive: alive, bought_back: bought_back, eliminations: eliminations } })
+  }
 
   let EditActions = () => (
     <Toolbar>
-      <Button disabled={(team === "" && name === "")} variant='contained' sx={{ m: 2 }} color="success" onClick={e => {createUser(e); window.location.href = "/#/users" }}> Save and Return </Button>
-      <Button disabled={(team === "" && name === "")} variant='outline' sx={{ m: 2 }} onClick={e => {createUser(e); window.location.reload(false) }}> Save  </Button>
-      <Button variant='outline' sx={{ m: 2 }} onClick={ () => { window.location.href = "/#/users" } }> Cancel </Button>
+      <EditButton size="large" resource='users'  />
+      <Button size="large" onClick={ () => { window.location.href = "/#/users" } }> Cancel </Button>
     </Toolbar>
   )
 
   return (
     <Edit>
-      <SimpleForm toolbar={<EditActions />}>
-        <TextInput source="name" onChange={e => { setName(e.target.value) }} />
-        <TextInput source="team" onChange={e => { setTeam(e.target.value) }} />
+      <SimpleForm>
+        <TextInput source="name" />
+        <TextInput source="team" />
         <TextInput source="target" />
         <BooleanInput source="alive" />
-        <BooleanInput source="boughtBack" />
+        <BooleanInput source="bought_back" />
         {
           /*
         <ArrayInput source="eliminations" disabled>
