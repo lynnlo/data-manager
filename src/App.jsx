@@ -17,7 +17,7 @@ const localDataProvider = localStorage({
       {
         id: 1,
         name: 'John Doe',
-        team: 'Fiesty Ferrets',
+        team: 'Feisty Ferrets',
         alive: true,
         boughtBack: false,
         target: "",
@@ -30,7 +30,7 @@ const localDataProvider = localStorage({
       {
         id: 2,
         name: 'Sarah Doe',
-        team: 'Fiesty Ferrets',
+        team: 'Feisty Ferrets',
         alive: false,
         boughtBack: false,
         target: "",
@@ -136,24 +136,28 @@ let assignTargets = () => {
     // Assign targets
     Object.keys(teams).forEach(team => {
       let teamMembers = teams[team]
-      teamMembers.forEach((member, index) => {
-        // Inital target to next team
-        let targetName = teamNames[Math.floor(Math.random() * teamNames.length)]
 
-        // If target is in history, target next team
-        let iterations = 0;
-        while (!targetName || member.history.includes(targetName) || targetName === member.team) {
-          targetName = teamNames[Math.floor(Math.random() * teamNames.length)]
-          console.log(Math.floor(Math.random() * teamNames.length))
-          iterations++
-          if (iterations > 100) {
-            console.log("Too many iterations")
-            break;
+      // Set target to random team
+      let targetName = teamNames[Math.floor(Math.random() * teamNames.length)]
+
+      // If target is in history, target next team
+      let iterations = 0;
+      while (!targetName || teamMembers[0].history.includes(targetName) || targetName === team) {
+        targetName = teamNames[Math.floor(Math.random() * teamNames.length)]
+        iterations++
+        if (iterations > 100) {
+          console.log("Too many iterations! Lowering requirements")
+          while (!targetName || targetName === team) {
+            targetName = teamNames[Math.floor(Math.random() * teamNames.length)]
+            if (iterations > 200) {
+              break
+            }
           }
+          break
         }
-        
-        console.log(teamNames)
-        console.log(member.name + " is targeting " + targetName)
+      }
+
+      teamMembers.forEach((member) => {
         localDataProvider.update('users', { id: member.id, data: {
           target: targetName,
           history: [...member.history, targetName]
