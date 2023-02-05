@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import {
   Admin,
-  ArrayInput,
   BooleanField,
   BooleanInput,
+  Confirm,
   Create,
   Datagrid,
   Edit,
@@ -11,13 +11,20 @@ import {
   List,
   Resource,
   SimpleForm,
-  SimpleFormIterator,
   TextField,
   TextInput,
   Toolbar,
 } from 'react-admin'
 
-import { Button, Card, CardContent, CircularProgress, Container, Grid, Typography } from '@mui/material'
+import {
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography 
+} from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import DeleteIcon from '@mui/icons-material/Delete'
 
@@ -350,6 +357,7 @@ let clearHistory = () => {
 }
 
 let Dashboard = () => {
+  //#region State
   let [totalParticipants, setTotalParticipants] = useState(-1)
   let [totalEliminations, setTotalEliminations] = useState(-1)
   let [totalBoughtBack, setTotalBoughtBack] = useState(-1)
@@ -384,6 +392,10 @@ let Dashboard = () => {
   localDataProvider.getList('users', { filter: { boughtBack: true }, sort: { field: "name", order: "ascending" }, pagination: { page: 1 , perPage: 200 } } ).then(data => {
     setTimeout(() => {setTotalBoughtBack(data.total)}, 500)
   })
+  //#endregion
+
+  let [confirmAssignOpen, setConfirmAssignOpen] = useState(false)
+  let [confirmClearOpen, setConfirmClearOpen] = useState(false)
 
   return (
     <Card style={{margin: '1em'}}>
@@ -422,8 +434,22 @@ let Dashboard = () => {
         </Container>
 
         <Container>
-          <Button variant='contained' startIcon={<RefreshIcon />} sx={ { m: 2 } } onClick={assignTargets}>Assign Targets</Button>
-          <Button variant='contained' startIcon={<DeleteIcon />} color="error" sx={ { m: 2 } } onClick={clearHistory}>Clear History</Button>
+          <Button variant='contained' startIcon={<RefreshIcon />} sx={ { m: 2 } } onClick={() => {setConfirmAssignOpen(true)}}>Assign Targets</Button>
+          <Button variant='contained' startIcon={<DeleteIcon />} color="error" sx={ { m: 2 } } onClick={() => {setConfirmClearOpen(true)}}>Clear History</Button>
+          <Confirm
+              isOpen={confirmAssignOpen}
+              title="Assign Targets"
+              content="Are you sure you want to update the assigned targets?"
+              onConfirm={() => { assignTargets(); setConfirmAssignOpen(false); window.location.href = "/#/users"; window.location.reload() }}
+              onClose={() => {setConfirmAssignOpen(false)}}
+          />
+          <Confirm
+              isOpen={confirmClearOpen}
+              title="Clear Targets"
+              content="Are you sure you want to clear all targets and history?"
+              onConfirm={() => { clearHistory(); setConfirmClearOpen(false); window.location.href = "/#/users"; window.location.reload() }}
+              onClose={() => {setConfirmClearOpen(false)}}
+          />
         </Container>
       </CardContent>
     </Card>
@@ -449,7 +475,11 @@ let Users = () => {
         <TextField source="target" />
         <BooleanField source="alive" />
         <BooleanField source="boughtBack" />
+        {
+          /*
         <FunctionField label="Eliminations" render={record => record.eliminations.length} />
+          */
+        }
       </Datagrid>
     </List>
   )
@@ -559,11 +589,15 @@ let UsersEdit = () => {
         <TextInput source="target" />
         <BooleanInput source="alive" />
         <BooleanInput source="boughtBack" />
+        {
+          /*
         <ArrayInput source="eliminations" disabled>
           <SimpleFormIterator disabled>
             <TextInput disabled />
           </SimpleFormIterator>
         </ArrayInput>
+          */
+        }
       </SimpleForm>
     </Edit>
   )
