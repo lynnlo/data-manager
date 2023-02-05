@@ -1,6 +1,6 @@
 {
-  "name": "data-manager",
-  "version": "0.1.0",
+  "name": "senior-assassin-game",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@mui/icons-material": "^5.11.0",

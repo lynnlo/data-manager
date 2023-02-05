@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {
   Admin,
+  ArrayInput,
   BooleanField,
   BooleanInput,
   Confirm,
@@ -9,11 +10,11 @@ import {
   Datagrid,
   Edit,
   EditButton,
-  ExportButton,
   FunctionField,
   List,
   Resource,
   SimpleForm,
+  SimpleFormIterator,
   TextField,
   TextInput,
   Toolbar,
@@ -38,7 +39,7 @@ import localStorage from 'ra-data-local-storage'
 
 //#region Data Provider
 const localDataProvider = localStorage({
-  defaultData: {
+  /*defaultData: {
     users: [
       {
         id: 1,
@@ -290,7 +291,7 @@ const localDataProvider = localStorage({
         ],
       },
     ],
-  },
+  },*/
 })
 //#endregion
 
@@ -430,7 +431,7 @@ let Dashboard = () => {
             <Grid item xs={12} sm={6}>
               <Typography variant='h6' sx={ { m: 2 } }> Total Amount Raised: </Typography>
               {
-                (totalParticipants === -1 || totalBought_back === -1) ? <CircularProgress /> : <Typography variant='h1' sx={ { m: 2 } }> ${10 * (totalParticipants + totalBought_back)} </Typography>
+                (totalParticipants === -1 || totalBought_back === -1) ? <CircularProgress /> : <Typography variant='h1' sx={ { m: 2 } }> ${20 * totalParticipants + 10 * totalBought_back} </Typography>
               }
             </Grid>
           </Grid>
@@ -644,6 +645,12 @@ let UsersCreate = () => {
       <SimpleForm toolbar={<CreateActions />}>
         <TextInput label="Participant Name" source="name" onChange={checkName} />
         <TextInput label="Team Name" source="team" onChange={checkTeam} />
+        <TextInput label="Target" source="target" />
+        <ArrayInput source="history">
+          <SimpleFormIterator>
+            <TextInput />
+          </SimpleFormIterator>
+        </ArrayInput>
         { 
           team !== "" && 
           (teamExists ?
@@ -681,15 +688,11 @@ let UsersEdit = () => {
         <TextInput source="target" />
         <BooleanInput source="alive" />
         <BooleanInput source="bought_back" />
-        {
-          /*
-        <ArrayInput source="eliminations" disabled>
-          <SimpleFormIterator disabled>
-            <TextInput disabled />
+        <ArrayInput source="history">
+          <SimpleFormIterator>
+            <TextInput />
           </SimpleFormIterator>
         </ArrayInput>
-          */
-        }
       </SimpleForm>
     </Edit>
   )
