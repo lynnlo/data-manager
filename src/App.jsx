@@ -12,6 +12,8 @@ import {
   EditButton,
   FunctionField,
   List,
+  NumberField,
+  NumberInput,
   Resource,
   SimpleForm,
   SimpleFormIterator,
@@ -377,7 +379,7 @@ let Dashboard = () => {
     let users = data.data
     let eliminations = 0
     users.forEach(user => {
-      eliminations += user.eliminations.length
+      eliminations += user.eliminations
     })
     setTimeout(() => {setTotalEliminations(eliminations)}, 800)
   })
@@ -446,14 +448,14 @@ let Dashboard = () => {
               isOpen={confirmAssignOpen}
               title="Assign Targets"
               content="Are you sure you want to update the assigned targets?"
-              onConfirm={() => { assignTargets(); setConfirmAssignOpen(false); window.location.href = "/#/users"; window.location.reload() }}
+              onConfirm={() => { assignTargets(); setConfirmAssignOpen(false); window.location.href = "/senior-assassin-game/#/users"; window.location.reload() }}
               onClose={() => {setConfirmAssignOpen(false)}}
           />
           <Confirm
               isOpen={confirmClearOpen}
               title="Clear Targets"
               content="Are you sure you want to clear all targets and history?"
-              onConfirm={() => { clearHistory(); setConfirmClearOpen(false); window.location.href = "/#/users"; window.location.reload() }}
+              onConfirm={() => { clearHistory(); setConfirmClearOpen(false); window.location.href = "/senior-assassin-game/#/users"; window.location.reload() }}
               onClose={() => {setConfirmClearOpen(false)}}
           />
         </Container>
@@ -558,7 +560,7 @@ let Users = () => {
         <FunctionField label="Name" render={
           record => (
             <Button color={record.alive ? "success" : "error"} onClick={() => {
-              window.location.href = "/#/users/" + record.id
+              window.location.href = "/senior-assassin-game/#/users/" + record.id
             }}>
               {record.name}
             </Button>
@@ -568,11 +570,7 @@ let Users = () => {
         <TextField source="target" />
         <BooleanField source="alive" />
         <BooleanField source="bought_back" />
-        {
-          /*
-        <FunctionField label="Eliminations" render={record => record.eliminations.length} />
-          */
-        }
+        <NumberField source="eliminations"/>
       </Datagrid>
     </List>
   )
@@ -634,9 +632,9 @@ let UsersCreate = () => {
 
   let CreateActions = () => (
     <Toolbar>
-      <Button disabled={(team === "" && name === "")} variant='contained' sx={{ m: 2 }} color="success" onClick={e => {createUser(e); window.location.href = "/#/users" }}> Save and Return </Button>
+      <Button disabled={(team === "" && name === "")} variant='contained' sx={{ m: 2 }} color="success" onClick={e => {createUser(e); window.location.href = "/senior-assassin-game/#/users" }}> Save and Return </Button>
       <Button disabled={(team === "" && name === "")} variant='outline' sx={{ m: 2 }} onClick={e => {createUser(e); window.location.reload(false) }}> Save and Add  </Button>
-      <Button variant='outline' sx={{ m: 2 }} onClick={ () => { window.location.href = "/#/users" } }> Cancel </Button>
+      <Button variant='outline' sx={{ m: 2 }} onClick={ () => { window.location.href = "/senior-assassin-game/#/users" } }> Cancel </Button>
     </Toolbar>
   )
   
@@ -646,6 +644,7 @@ let UsersCreate = () => {
         <TextInput label="Participant Name" source="name" onChange={checkName} />
         <TextInput label="Team Name" source="team" onChange={checkTeam} />
         <TextInput label="Target" source="target" />
+        <NumberInput label="Eliminations" source="eliminations" />
         <ArrayInput source="history">
           <SimpleFormIterator>
             <TextInput />
@@ -676,7 +675,7 @@ let UsersEdit = () => {
   let EditActions = () => (
     <Toolbar>
       <EditButton size="large" resource='users'  />
-      <Button size="large" onClick={ () => { window.location.href = "/#/users" } }> Cancel </Button>
+      <Button size="large" onClick={ () => { window.location.href = "/senior-assassin-game/#/users" } }> Cancel </Button>
     </Toolbar>
   )
 
@@ -688,6 +687,7 @@ let UsersEdit = () => {
         <TextInput source="target" />
         <BooleanInput source="alive" />
         <BooleanInput source="bought_back" />
+        <NumberInput label="Eliminations" source="eliminations" />
         <ArrayInput source="history">
           <SimpleFormIterator>
             <TextInput />
