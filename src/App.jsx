@@ -52,8 +52,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ]
+        eliminations: 0
       },
       {
         id: 2,
@@ -64,8 +63,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ]
+        eliminations: 0
       },
       {
         id: 3,
@@ -76,9 +74,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-          'Sarah Doe',
-        ]
+        eliminations: 0
       },
       {
         id: 4,
@@ -89,8 +85,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ]
+        eliminations: 0
       },
       {
         id: 5,
@@ -101,8 +96,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ]
+        eliminations: 0
       },
       {
         id: 6,
@@ -113,9 +107,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-          'Felix Mark',
-        ]
+        eliminations: 0
       },
       {
         id: 7,
@@ -126,8 +118,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 8,
@@ -138,9 +129,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-          'Pedro Williams',
-        ],
+        eliminations: 0,
       },
       {
         id: 9,
@@ -151,8 +140,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 10,
@@ -163,9 +151,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-          'Terry Crews',
-        ],
+        eliminations: 0,
       },
       {
         id: 11,
@@ -176,8 +162,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 12,
@@ -188,8 +173,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 13,
@@ -200,8 +184,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 14,
@@ -212,8 +195,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 15,
@@ -224,9 +206,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-          'Hermione Granger',
-        ],
+        eliminations: 0,
       },
       {
         id: 16,
@@ -237,8 +217,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 17,
@@ -249,8 +228,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 18,
@@ -261,11 +239,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-          'Neville Longbottom',
-          'Severus Snape',
-          'Harry Potter',
-        ],
+        eliminations: 0,
       },
       {
         id: 19,
@@ -276,8 +250,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-        ],
+        eliminations: 0,
       },
       {
         id: 20,
@@ -288,9 +261,7 @@ const localDataProvider = localStorage({
         target: "",
         history: [
         ],
-        eliminations: [
-          'Fred Weasley',
-        ],
+        eliminations: 0,
       },
     ],
   },*/
@@ -328,13 +299,7 @@ let assignTargets = () => {
         targetName = teamNames[Math.floor(Math.random() * teamNames.length)]
         iterations++
         if (iterations > 100) {
-          console.log("Too many iterations! Lowering requirements")
-          while (!targetName || targetName === team) {
-            targetName = teamNames[Math.floor(Math.random() * teamNames.length)]
-            if (iterations > 200) {
-              break
-            }
-          }
+          targetName = "No team found!"
           break
         }
       }
