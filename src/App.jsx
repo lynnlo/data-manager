@@ -270,6 +270,7 @@ const localDataProvider = localStorage({
 
 //#region Dashboard
 let assignTargets = () => {
+  console.log(localDataProvider.getList())
   localDataProvider.getList('users', { filter: { alive: true }, sort: { field: "name", order: "ascending" }, pagination: { page: 1 , perPage: 200 } } ).then(data => {
     let users = data.data
 
@@ -344,7 +345,7 @@ let Dashboard = () => {
     let users = data.data
     let eliminations = 0
     users.forEach(user => {
-      eliminations += user.eliminations
+      eliminations += parseInt(user.eliminations)
     })
     setTimeout(() => {setTotalEliminations(eliminations)}, 800)
   })
@@ -473,7 +474,7 @@ let UsersActions = ({ basePath }) => {
           let bought_back = values[4] === 'true'
           let target = values[5] || ''
           let history = values[6].split(';') || []
-          let eliminations = values[7].split(';') || []
+          let eliminations = values[7] || 0
           localDataProvider.create('users', { data: { id, name, team, alive, bought_back, target, history, eliminations } })
           window.location.reload()
         })
@@ -547,6 +548,10 @@ let UsersCreate = () => {
 
   let [name, setName] = useState("")
   let [nameExists, setNameExists] = useState(false)
+  
+  let [eliminations, setEliminations] = useState(0)
+  let [history, setHistory] = useState([])
+  let [target, setTarget] = useState("")
 
   let checkTeam = (e) => {
     let teamName = e.target.value
@@ -590,7 +595,7 @@ let UsersCreate = () => {
 
   let createUser = (e) => {
     e.preventDefault()
-    localDataProvider.create('users', { data: { name: name, team: team, alive: true, bought_back: false, eliminations: [] } })
+    localDataProvider.create('users', { data: { name: name, team: team, target: target, alive: true, bought_back: false, eliminations: eliminations, history: history } })
   }
 
 
@@ -608,9 +613,9 @@ let UsersCreate = () => {
       <SimpleForm toolbar={<CreateActions />}>
         <TextInput label="Participant Name" source="name" onChange={checkName} />
         <TextInput label="Team Name" source="team" onChange={checkTeam} />
-        <TextInput label="Target" source="target" />
-        <NumberInput label="Eliminations" source="eliminations" />
-        <ArrayInput source="history">
+        <TextInput label="Target" source="target" onChange={e => setTarget(e.target.value)} />
+        <NumberInput label="Eliminations" source="eliminations" onChange={e => setEliminations(e.target.value)} />
+        <ArrayInput source="history" onChange={e => setHistory(e.target.value)} >
           <SimpleFormIterator>
             <TextInput />
           </SimpleFormIterator>
