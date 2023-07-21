@@ -1,0 +1,1 @@
+var a=function(r){var e=!0,t=!0,o=!1;if(typeof r=="function"){try{r.call("f",function(n,l,c){typeof c!="object"&&(e=!1)}),r.call([null],function(){"use strict";t=typeof this=="string"},"x")}catch{o=!0}return!o&&e&&t}return!1};export{a as e};
